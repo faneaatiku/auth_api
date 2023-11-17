@@ -5,6 +5,7 @@ go 1.20
 require github.com/labstack/echo/v4 v4.11.1
 
 require (
+	github.com/dimuska139/go-email-normalizer v1.2.1 // indirect
 	github.com/faneaatiku/iac v0.1.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect

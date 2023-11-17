@@ -2,47 +2,30 @@ package service
 
 import (
 	"fmt"
+	"github.com/faneaatiku/auth_api/app/dto"
+	"github.com/faneaatiku/auth_api/app/entity"
 	"github.com/labstack/echo/v4"
-	"os"
-	"strings"
 )
 
-type AuthService struct {
-	logger echo.Logger
-
-	//the key on which we store the AuthorizedApp is the PublicKey
-	authorizedApps map[string]interface{}
+type UserStorage interface {
 }
 
-func NewAuthService(logger echo.Logger) (*AuthService, error) {
-	if logger == nil {
+type AuthService struct {
+	logger      echo.Logger
+	userStorage UserStorage
+}
+
+func NewAuthService(logger echo.Logger, userStorage UserStorage) (*AuthService, error) {
+	if logger == nil || userStorage == nil {
 		return nil, fmt.Errorf("invalid dependencies provided to AuthService constructor")
 	}
 
-	authorized := make(map[string]interface{})
-	envKeys, found := os.LookupEnv("AUTHORIZED_KEYS")
-	if found {
-		split := strings.Split(envKeys, ";")
-		for _, key := range split {
-			key = strings.TrimSpace(key)
-			if key == "" {
-				continue
-			}
-			authorized[key] = nil
-		}
-	}
-
 	return &AuthService{
-		logger:         logger,
-		authorizedApps: authorized,
+		logger:      logger,
+		userStorage: userStorage,
 	}, nil
 }
 
-func (as *AuthService) ValidateAppKey(key string, c echo.Context) (bool, error) {
-	_, ok := as.authorizedApps[key]
-	if !ok {
-		return false, fmt.Errorf("unauthorized application")
-	}
-
-	return true, nil
+func (as AuthService) RegisterUser(request dto.RegisterRequest) (entity.User, error) {
+	return entity.User{Email: "treaba mea"}, nil
 }

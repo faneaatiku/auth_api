@@ -2,10 +2,24 @@ package entity
 
 import "time"
 
-type User struct {
-	Timestampable
+const (
+	StatusInactive UserStatus = 0
+	StatusActive   UserStatus = 10
+)
 
-	email     string
-	password  string
-	lastLogin time.Time
+type UserStatus int
+
+func (us UserStatus) IsActive() bool {
+	return us == StatusActive
+}
+
+type User struct {
+	Id             int64
+	Email          string
+	CanonicalEmail string
+	Status         UserStatus
+	Password       string
+	Salt           string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
